@@ -13,6 +13,8 @@ import androidx.core.app.NotificationCompat
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import ru.notes.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -27,13 +29,23 @@ class MainActivity : AppCompatActivity() {
             setContentView(it.root)
         }
 
-        controller = (supportFragmentManager.findFragmentById(R.id.container) as
-                NavHostFragment).navController
+        // Set up navigation controller
+        controller = (supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment).navController
         controller?.let { navController ->
             binding?.bottomNav?.setupWithNavController(navController)
         }
+
+        // Initialize notification
         notification = Notification(this)
         notification?.showNotification(title = "hi", text = "muy")
+
+        // Set up RecyclerView
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val itemList = listOf("Item 1", "Item 2", "Item 3")
+        val adapter = Adapter(itemList)
+        recyclerView.adapter = adapter
     }
 
     override fun onDestroy() {
@@ -45,5 +57,4 @@ class MainActivity : AppCompatActivity() {
         super.onBackPressed()
         controller?.navigateUp()
     }
-
 }
